@@ -50,6 +50,12 @@ void QTSGraph::PutPixel(int x, int y, Qt::GlobalColor c)
     update();
 }
 
+void QTSGraph::slotStartTimer()
+{
+    StartTimer->stop();
+    PaintBox();
+}
+
 void QTSGraph::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);

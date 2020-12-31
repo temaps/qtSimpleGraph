@@ -32,6 +32,7 @@ private:
     QPixmap   m_Pixmap;
     QTimer *StartTimer;
     bool EventMouseClicked = false;
+    void PaintBox();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

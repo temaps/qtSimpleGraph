@@ -9,9 +9,8 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-void QTSGraph::slotStartTimer()
+void QTSGraph::PaintBox()
 {
-
     // Тут рисовать
 
     PutPixel(100,100);
@@ -26,6 +25,4 @@ void QTSGraph::slotStartTimer()
     }
 
     // Конец рисования
-
-    StartTimer->stop();
 }
