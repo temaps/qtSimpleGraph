@@ -4,7 +4,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    /*
+     * Задаётся размер и положение окна
+     * (int w = 640, int h = 480, int x = -1, int y = -1, QWidget *parent = nullptr)
+     * В случае отрицательнго значения x или y, окно создаётся в центре экрана.
+     */
     QTSGraph w(1024,768);
+
     w.show();
     return a.exec();
 }
