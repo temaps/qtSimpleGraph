@@ -1,7 +1,7 @@
 #include "qtsgraph.h"
 #include "ui_qtsgraph.h"
 
-void QTSGraph::delay(int ms)
+void QTSGraph::Delay(int ms)
 {
     QTime dieTime= QTime::currentTime().addMSecs(ms);
     while (QTime::currentTime() < dieTime)
@@ -25,9 +25,9 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     this->setWindowTitle("Рисунок");
     m_Pixmap = QPixmap(w, h);
     m_Pixmap.fill(Qt::white);
-    starttimer = new QTimer();
-    connect(starttimer, SIGNAL(timeout()), this, SLOT(slotstarttimer()));
-    starttimer->start(500);
+    StartTimer = new QTimer();
+    connect(StartTimer, SIGNAL(timeout()), this, SLOT(slotStartTimer()));
+    StartTimer->start(500);
 }
 
 QTSGraph::~QTSGraph()
@@ -35,7 +35,14 @@ QTSGraph::~QTSGraph()
     delete ui;
 }
 
-void QTSGraph::putpixel(int x, int y, Qt::GlobalColor c)
+bool QTSGraph::MouseClicked()
+{
+    bool m = EventMouseClicked;
+    EventMouseClicked = false;
+    return m;
+}
+
+void QTSGraph::PutPixel(int x, int y, Qt::GlobalColor c)
 {
     QPainter painter(&m_Pixmap);
     painter.setPen(QPen(QBrush(QColor(c)), 5 ));
@@ -51,6 +58,7 @@ void QTSGraph::paintEvent(QPaintEvent *event)
 
 void QTSGraph::mousePressEvent(QMouseEvent *event)
 {
+    EventMouseClicked = true;
     if (event->buttons() & Qt::LeftButton)
     {
         // Левая кнопка

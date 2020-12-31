@@ -9,14 +9,23 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-void QTSGraph::slotstarttimer()
+void QTSGraph::slotStartTimer()
 {
+
     // Тут рисовать
 
-    putpixel(100,100);
-    delay(2000);
-    putpixel(300,100);
+    PutPixel(100,100);
+    Delay(2000);
+    PutPixel(300,100);
+    int x=1;
+    while(!MouseClicked() && x < 1024)
+    {
+        PutPixel(x,50);
+        x+=1;
+        Delay(200);
+    }
 
     // Конец рисования
-    starttimer->stop();
+
+    StartTimer->stop();
 }

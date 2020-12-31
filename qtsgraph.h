@@ -20,18 +20,20 @@ class QTSGraph : public QMainWindow
 public:
     QTSGraph(int w = 640, int h = 480, int x = -1, int y = -1, QWidget *parent = nullptr);
     ~QTSGraph();
-    void putpixel(int x, int y, Qt::GlobalColor c = Qt::red);
-    void delay(int ms = 1000);
+    void PutPixel(int x, int y, Qt::GlobalColor c = Qt::red);
+    void Delay(int ms = 1000);
+    bool MouseClicked();
 
 private slots:
-    void slotstarttimer();
+    void slotStartTimer();
 
 private:
     Ui::QTSGraph *ui;
     QPixmap   m_Pixmap;
-    QTimer *starttimer;
+    QTimer *StartTimer;
+    bool EventMouseClicked = false;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
 };
