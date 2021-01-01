@@ -34,6 +34,14 @@ QTSGraph::~QTSGraph()
     // Деструктор
 }
 
+void QTSGraph::Circle(int x, int y, int radius)
+{
+    QPainter painter(&Canvas);
+    painter.setPen(Pen);
+    painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
+    update();
+}
+
 bool QTSGraph::MouseClicked()
 {
     bool m = EventMouseClicked;
@@ -41,11 +49,11 @@ bool QTSGraph::MouseClicked()
     return m;
 }
 
-void QTSGraph::OutTextXY(int x, int y, std::string s)
+void QTSGraph::OutTextXY(int x, int y, std::string caption)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
-    painter.drawText(x, y, QString::fromStdString(s));
+    painter.drawText(x, y, QString::fromStdString(caption));
     update();
 }
 
@@ -55,6 +63,18 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
     painter.setPen(QPen(QBrush(QColor(c)), PenWidth));
     painter.drawPoint(x, y);
     update();
+}
+
+int QTSGraph::ReadKey()
+{
+    if(IDPressedKey == -1)
+    {
+        while(!KeyPressed())
+            Delay(100);
+    }
+    int t = IDPressedKey;
+    IDPressedKey = -1;
+    return t;
 }
 
 void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
@@ -89,6 +109,13 @@ void QTSGraph::Line(int x1, int y1, int x2, int y2)
     update();
 }
 
+bool QTSGraph::KeyPressed()
+{
+    bool m = EventKeyPressed;
+    EventKeyPressed = false;
+    return m;
+}
+
 void QTSGraph::slotStartTimer()
 {
     StartTimer->stop();
@@ -111,5 +138,15 @@ void QTSGraph::mousePressEvent(QMouseEvent *event)
     else if (event->buttons() & Qt::RightButton)
     {
         // Правая кнопка
+    }
+}
+
+void QTSGraph::keyPressEvent(QKeyEvent *event)
+{
+    EventKeyPressed = true;
+    IDPressedKey = event->key();
+    if (IDPressedKey == Qt::Key_Escape)
+    {
+        // Нажатие Esc
     }
 }
