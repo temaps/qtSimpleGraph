@@ -10,15 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    qtsgraph.cpp
+    ../qtsgraph.cpp
 
 HEADERS += \
-    qtsgraph.h
+    ../qtsgraph.h
 
 FORMS +=
 
-TRANSLATIONS += \
-    qtSimpleGraph_ru_RU.ts
+TRANSLATIONS += 
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

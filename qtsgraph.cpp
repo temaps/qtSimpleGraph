@@ -1,18 +1,15 @@
 #include "qtsgraph.h"
-#include "ui_qtsgraph.h"
 
 void QTSGraph::Delay(int ms)
 {
     QTime dieTime= QTime::currentTime().addMSecs(ms);
     while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
 }
 
 QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::QTSGraph)
 {
-    ui->setupUi(this);
     if(x < 0 || y < 0)
     {
         QDesktopWidget desktop;
@@ -23,8 +20,10 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     }
     this->setGeometry(x, y, w, h);
     this->setWindowTitle("Рисунок");
-    m_Pixmap = QPixmap(w, h);
-    m_Pixmap.fill(Qt::white);
+    Canvas = QPixmap(w, h);
+    Canvas.fill(Qt::white);
+    QRgb DefaultColor = 0x00000000;
+    Pen = QPen(QBrush(QColor(DefaultColor)), 1);
     StartTimer = new QTimer();
     connect(StartTimer, SIGNAL(timeout()), this, SLOT(slotStartTimer()));
     StartTimer->start(500);
@@ -32,7 +31,7 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
 
 QTSGraph::~QTSGraph()
 {
-    delete ui;
+    // Деструктор
 }
 
 bool QTSGraph::MouseClicked()
@@ -42,11 +41,29 @@ bool QTSGraph::MouseClicked()
     return m;
 }
 
-void QTSGraph::PutPixel(int x, int y, Qt::GlobalColor c)
+void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 {
-    QPainter painter(&m_Pixmap);
-    painter.setPen(QPen(QBrush(QColor(c)), 5 ));
-    painter.drawPoint( x, y );
+    QPainter painter(&Canvas);
+    painter.setPen(QPen(QBrush(QColor(c)), PenWidth));
+    painter.drawPoint(x, y);
+    update();
+}
+
+void QTSGraph::SetColor(QRgb c)
+{
+    Pen.setColor(QColor(c));
+}
+
+void QTSGraph::SetWidth(int PenWidth)
+{
+    Pen.setWidth(PenWidth);
+}
+
+void QTSGraph::Line(int x1, int y1, int x2, int y2)
+{
+    QPainter painter(&Canvas);
+    painter.setPen(Pen);
+    painter.drawLine(x1, y1, x2, y2);
     update();
 }
 
@@ -59,7 +76,7 @@ void QTSGraph::slotStartTimer()
 void QTSGraph::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
-    p.drawPixmap(0, 0,m_Pixmap);
+    p.drawPixmap(0, 0, Canvas);
 }
 
 void QTSGraph::mousePressEvent(QMouseEvent *event)
