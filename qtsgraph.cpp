@@ -41,6 +41,14 @@ bool QTSGraph::MouseClicked()
     return m;
 }
 
+void QTSGraph::OutTextXY(int x, int y, std::string s)
+{
+    QPainter painter(&Canvas);
+    painter.setPen(Pen);
+    painter.drawText(x, y, QString::fromStdString(s));
+    update();
+}
+
 void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 {
     QPainter painter(&Canvas);
@@ -49,12 +57,26 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
     update();
 }
 
+void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
+{
+    QPainter painter(&Canvas);
+    painter.setPen(Pen);
+    painter.drawRect(x1, y1, x2 - x1, y2 - y1);
+    update();
+}
+
 void QTSGraph::SetColor(QRgb c)
 {
     Pen.setColor(QColor(c));
 }
 
-void QTSGraph::SetWidth(int PenWidth)
+void QTSGraph::SetPenStyle(int PenWidth, int PenStyle)
+{
+    Pen.setWidth(PenWidth);
+    Pen.setStyle(Qt::PenStyle(PenStyle));
+}
+
+void QTSGraph::SetPenWidth(int PenWidth)
 {
     Pen.setWidth(PenWidth);
 }
