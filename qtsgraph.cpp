@@ -117,7 +117,7 @@ int QTSGraph::ReadKey()
 {
     if(!EventKeyPressed || IDPressedKey == -1)
     {
-        while(!KeyPressed())
+        while(!KeyPressed() && this->isVisible())
             Delay(100);
     }
     int t = IDPressedKey;
@@ -210,4 +210,12 @@ void QTSGraph::keyPressEvent(QKeyEvent *event)
     {
         // Нажатие Esc
     }
+}
+
+void QTSGraph::closeEvent(QCloseEvent *event)
+{
+    //Закрытие окна
+    delete ResetTimer;
+    delete StartTimer;
+    delete this;
 }
