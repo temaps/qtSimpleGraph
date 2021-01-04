@@ -56,6 +56,9 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #define clBlue      0x000000FF
 #define clBlack     0x00000000
 #define clWhite     0x00FFFFFF
+#define clYellow    0x00FFFF00
+#define clMagenta   0x00FF00FF
+#define clCyan      0x0000FFFF
 
 class QTSGraph : public QMainWindow
 {
