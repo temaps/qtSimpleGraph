@@ -183,7 +183,6 @@ void QTSGraph::slotResetTimer()
 {
     ResetTimer->stop();
     EventKeyPressed = false;
-    IDPressedKey = -1;
     EventMouseClicked = false;
 }
 
