@@ -50,6 +50,7 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QTime>
 #include <string>
 #include <QDebug>
+#include <math.h>
 
 #define clRed       0x00FF0000
 #define clGreen     0x0000FF00
@@ -110,26 +111,36 @@ public:
         5 - DashDotDotLine
      */
     void SetPenWidth(int PenWidth);
+    void SetTextStyle(int idFont, int Direction, int CharSize);
+    /*
+        0 - serif
+        1 - sans
+        2 - mono
+     */
 
 private slots:
-    void slotStartTimer();
     void slotResetTimer();
+    void slotStartTimer();
 
 private:
-    QPixmap Canvas;
-    QTimer *StartTimer;
-    QTimer *ResetTimer;
     bool EventMouseClicked = false;
     bool EventKeyPressed = false;
     int IDPressedKey = -1;
-    void PaintBox();
-    QBrush Brush;
-    QPen Pen;
     int ResetInterval;
+    int TextDirection = 0;
+
+    QBrush Brush;
+    QPixmap Canvas;
+    QFont Font;
+    QPen Pen;
+    QTimer *ResetTimer;
+    QTimer *StartTimer;
+
+    void PaintBox();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event)  override;
     void closeEvent(QCloseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event)  override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 };

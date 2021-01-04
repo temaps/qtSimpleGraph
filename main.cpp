@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
      * (int w = 640, int h = 480, int x = -1, int y = -1, QWidget *parent = nullptr)
      * В случае отрицательного значения x или y, окно создаётся в центре экрана.
      */
-    QTSGraph w(800, 600);
+    QTSGraph w(600, 600);
 
     w.show();
     return a.exec();
@@ -22,9 +22,17 @@ void QTSGraph::PaintBox()
     // Начало рисования
 
     SetColor(clGreen);
-    Line(0, 0, 800, 600);
+    Line(0, 0, 600, 600);
     SetColor(0xFF0000);
-    Line(800, 0, 0, 600);
+    Line(600, 0, 0, 600);
+    Rectangle(0,0,600,600);
+    SetColor(clBlue);
+    SetTextStyle(0, 45, 10);
+    OutTextXY(30, 30, "Hello world!");
+    SetTextStyle(1, 0, 20);
+    OutTextXY(210, 50, "Hello world!");
+    SetTextStyle(2, 0, 30);
+    OutTextXY(160, 550, "Hello world!");
 
     // Конец рисования
 }

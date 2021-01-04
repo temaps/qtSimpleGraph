@@ -66,6 +66,7 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     Canvas.fill(Qt::white);
     QRgb DefaultColor = 0x00000000;
     Pen = QPen(QBrush(QColor(DefaultColor)), 1);
+    Font = QFont();
     Brush = QBrush(QColor(DefaultColor),Qt::NoBrush);
     ResetInterval = 1000;
     ResetTimer = new QTimer();
@@ -102,7 +103,20 @@ void QTSGraph::OutTextXY(int x, int y, std::string caption)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
+    painter.setFont(Font);
+    double r, b, sa, ca, sb, cb, xn, yn;
+    b = TextDirection*3.14159/180;
+    r = sqrt(x * x + y * y);
+    sa = y / r;
+    ca = x / r;
+    sb = sin(b);
+    cb = cos(b);
+    xn = r * (ca * cb - sa * sb);
+    yn = r * (sa * cb + sb * ca);
+    painter.translate(x - xn, y - yn);
+    painter.rotate(TextDirection);
     painter.drawText(x, y, QString::fromStdString(caption));
+    //painter.rotate(-TextDirection);
     update();
 }
 
@@ -155,6 +169,17 @@ void QTSGraph::SetPenStyle(int PenWidth, int PenStyle)
 void QTSGraph::SetPenWidth(int PenWidth)
 {
     Pen.setWidth(PenWidth);
+}
+
+void QTSGraph::SetTextStyle(int idFont, int Direction, int CharSize)
+{
+    QString f;
+    if(idFont == 0) f = "serif";
+    else if(idFont == 1) f = "sans";
+    else if(idFont == 3) f = "mono";
+    TextDirection = Direction;
+    Font.setFamily(f);
+    Font.setPointSize(CharSize);
 }
 
 void QTSGraph::Line(int x1, int y1, int x2, int y2)
