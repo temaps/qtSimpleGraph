@@ -118,7 +118,7 @@ int QTSGraph::ReadKey()
     if(!EventKeyPressed || IDPressedKey == -1)
     {
         while(!KeyPressed() && this->isVisible())
-            Delay(100);
+            Delay(1);
     }
     int t = IDPressedKey;
     IDPressedKey = -1;
@@ -217,5 +217,5 @@ void QTSGraph::closeEvent(QCloseEvent *event)
     //Закрытие окна
     delete ResetTimer;
     delete StartTimer;
-    delete this;
+    exit(0);
 }
