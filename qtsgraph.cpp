@@ -67,9 +67,10 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     QRgb DefaultColor = 0x00000000;
     Pen = QPen(QBrush(QColor(DefaultColor)), 1);
     Brush = QBrush(QColor(DefaultColor),Qt::NoBrush);
+    ResetInterval = 1000;
     ResetTimer = new QTimer();
     connect(ResetTimer, SIGNAL(timeout()), this, SLOT(slotResetTimer()));
-    ResetTimer->start(500);
+    ResetTimer->start(ResetInterval);
 
     StartTimer = new QTimer();
     connect(StartTimer, SIGNAL(timeout()), this, SLOT(slotStartTimer()));
@@ -115,7 +116,7 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 
 int QTSGraph::ReadKey()
 {
-    if(!EventKeyPressed || IDPressedKey == -1)
+    if(IDPressedKey == -1)
     {
         while(!KeyPressed() && this->isVisible())
             Delay(1);
@@ -166,6 +167,7 @@ void QTSGraph::Line(int x1, int y1, int x2, int y2)
 
 bool QTSGraph::KeyPressed()
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
     bool m = EventKeyPressed;
     EventKeyPressed = false;
     return m;
@@ -179,7 +181,9 @@ void QTSGraph::slotStartTimer()
 
 void QTSGraph::slotResetTimer()
 {
+    ResetTimer->stop();
     EventKeyPressed = false;
+    IDPressedKey = -1;
     EventMouseClicked = false;
 }
 
@@ -191,6 +195,7 @@ void QTSGraph::paintEvent(QPaintEvent *event)
 
 void QTSGraph::mousePressEvent(QMouseEvent *event)
 {
+    ResetTimer->stop();
     EventMouseClicked = true;
     if (event->buttons() & Qt::LeftButton)
     {
@@ -200,16 +205,19 @@ void QTSGraph::mousePressEvent(QMouseEvent *event)
     {
         // Правая кнопка
     }
+    ResetTimer->start(ResetInterval);
 }
 
 void QTSGraph::keyPressEvent(QKeyEvent *event)
 {
+    ResetTimer->stop();
     EventKeyPressed = true;
     IDPressedKey = event->key();
     if (IDPressedKey == Qt::Key_Escape)
     {
         // Нажатие Esc
     }
+    ResetTimer->start(ResetInterval);
 }
 
 void QTSGraph::closeEvent(QCloseEvent *event)

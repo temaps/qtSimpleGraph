@@ -125,6 +125,7 @@ private:
     void PaintBox();
     QBrush Brush;
     QPen Pen;
+    int ResetInterval;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
