@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QTime>
 #include <string>
+#include <QDebug>
 
 #define clRed       0x00FF0000
 #define clGreen     0x0000FF00
@@ -28,6 +29,7 @@ public:
 
     void Circle(int x, int y, int radius);
     void Delay(int ms = 1000);
+    QRgb GetPixel(int x, int y);
     void Line(int x1, int y1, int x2, int y2);
     bool KeyPressed();
     bool MouseClicked();
@@ -36,6 +38,27 @@ public:
     int ReadKey();
     void Rectangle(int x1, int y1, int x2, int y2);
     void SetColor(QRgb c);
+    void SetFillStyle(int Pattern, QRgb Color); // Стиль и цыет заливки
+    /*
+        0 - NoBrush
+        1 - SolidPattern
+        2 - Dense1Pattern
+        3 - Dense2Pattern
+        4 - Dense3Pattern
+        5 - Dense4Pattern
+        6 - Dense5Pattern
+        7 - Dense6Pattern
+        8 - Dense7Pattern
+        9 - HorPattern
+        10 - VerPattern
+        11 - CrossPattern
+        12 - BDiagPattern
+        13 - FDiagPattern
+        14 - DiagCrossPattern
+        15 - LinearGradientPattern
+        16 - RadialGradientPattern
+        17 - ConicalGradientPattern
+     */
     void SetPenStyle(int PenWidth, int PenStyle = 1); // Толщина и стиль линии
     /*
         0 - NoPen
@@ -49,14 +72,17 @@ public:
 
 private slots:
     void slotStartTimer();
+    void slotResetTimer();
 
 private:
     QPixmap Canvas;
     QTimer *StartTimer;
+    QTimer *ResetTimer;
     bool EventMouseClicked = false;
     bool EventKeyPressed = false;
     int IDPressedKey = -1;
     void PaintBox();
+    QBrush Brush;
     QPen Pen;
 
 protected:

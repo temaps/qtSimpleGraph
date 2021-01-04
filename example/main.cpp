@@ -1,5 +1,6 @@
 #include "../qtsgraph.h"
 #include <iostream>
+#include <sstream>
 using namespace std;
 using namespace Qt;
 
@@ -24,12 +25,12 @@ void QTSGraph::PaintBox()
 
     SetColor(clRed);
     Circle(300, 300, 100);
+    OutTextXY(20, 10, "Нажмите Enter или другую клавишу");
     int k;
     k = ReadKey();
     OutTextXY(20, 40, "Код нажатой клавиши: " + to_string(k));
     if(k == 16777220)
     {
-        PutPixel(300, 300, clRed, 3);
         for(int i = 0; i <= 5; i++)
         {
             SetPenStyle(1, 1);
@@ -48,7 +49,17 @@ void QTSGraph::PaintBox()
         PutPixel(100, 100, 0x00FF0000, 10);
         Delay(1000);
         PutPixel(300, 100);
+        PutPixel(301, 100);
+        PutPixel(302, 100);
+        PutPixel(298, 100);
+        PutPixel(299, 100);
+        PutPixel(300, 101);
+        PutPixel(300, 102);
+        PutPixel(300, 99);
+        PutPixel(300, 98);
+        PutPixel(300, 300, clRed, 3);
         int x = 1;
+        OutTextXY(20, 70, "Можно прервать, если кликнуть мышью.");
         while(!MouseClicked() && x < 1024)
         {
             PutPixel(x, 50, 0x555555 + x * 16, 5);
@@ -56,6 +67,31 @@ void QTSGraph::PaintBox()
             Delay(10);
         }
     }
+    SetPenStyle(1, 1);
+    SetColor(clBlack);
+    SetFillStyle(3, clRed);
+    Rectangle(500, 100, 800, 300);
+    SetFillStyle(CrossPattern, clBlue);
+    Rectangle(500, 400, 800, 600);
+    SetPenStyle(1, 1);
+    SetColor(clBlack);
+    SetFillStyle(1, clBlack);
+    Rectangle(10, 600, 200, 700);
+    stringstream ss;
+    ss << "#" << hex << GetPixel(100,720);
+    SetColor(clBlack);
+    OutTextXY(10, 590, ss.str());
+    ss.str("");
+    ss << "#" << hex << GetPixel(50,650);
+    SetColor(clWhite);
+    OutTextXY(30, 620, ss.str());
+    ss.str("");
+    SetColor(clRed);
+    SetFillStyle(1, clRed);
+    Rectangle(200, 600, 400, 700);
+    ss << "#" << hex << GetPixel(250,650);
+    SetColor(clWhite);
+    OutTextXY(230, 620, ss.str());
 
     // Конец рисования
 }

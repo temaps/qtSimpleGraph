@@ -7,6 +7,10 @@ void QTSGraph::Delay(int ms)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
 }
 
+QRgb QTSGraph::GetPixel(int x, int y)
+{
+    return Canvas.toImage().pixelColor(x, y).rgba();
+}
 QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     : QMainWindow(parent)
 {
@@ -24,6 +28,11 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     Canvas.fill(Qt::white);
     QRgb DefaultColor = 0x00000000;
     Pen = QPen(QBrush(QColor(DefaultColor)), 1);
+    Brush = QBrush(QColor(DefaultColor),Qt::NoBrush);
+    ResetTimer = new QTimer();
+    connect(ResetTimer, SIGNAL(timeout()), this, SLOT(slotResetTimer()));
+    ResetTimer->start(500);
+
     StartTimer = new QTimer();
     connect(StartTimer, SIGNAL(timeout()), this, SLOT(slotStartTimer()));
     StartTimer->start(500);
@@ -38,6 +47,7 @@ void QTSGraph::Circle(int x, int y, int radius)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
+    painter.setBrush(Brush);
     painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
     update();
 }
@@ -67,7 +77,7 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 
 int QTSGraph::ReadKey()
 {
-    if(IDPressedKey == -1)
+    if(!EventKeyPressed || IDPressedKey == -1)
     {
         while(!KeyPressed())
             Delay(100);
@@ -81,6 +91,7 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
+    painter.setBrush(Brush);
     painter.drawRect(x1, y1, x2 - x1, y2 - y1);
     update();
 }
@@ -88,6 +99,12 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
 void QTSGraph::SetColor(QRgb c)
 {
     Pen.setColor(QColor(c));
+}
+
+void QTSGraph::SetFillStyle(int Pattern, QRgb Color)
+{
+    Brush.setStyle(Qt::BrushStyle(Pattern));
+    Brush.setColor(QColor(Color));
 }
 
 void QTSGraph::SetPenStyle(int PenWidth, int PenStyle)
@@ -120,6 +137,12 @@ void QTSGraph::slotStartTimer()
 {
     StartTimer->stop();
     PaintBox();
+}
+
+void QTSGraph::slotResetTimer()
+{
+    EventKeyPressed = false;
+    EventMouseClicked = false;
 }
 
 void QTSGraph::paintEvent(QPaintEvent *event)
