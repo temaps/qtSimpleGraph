@@ -45,6 +45,15 @@ void QTSGraph::Delay(int ms)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
 }
 
+void QTSGraph::Ellipse(int x1, int y1, int x2, int y2)
+{
+    QPainter painter(&Canvas);
+    painter.setPen(Pen);
+    painter.setBrush(Brush);
+    painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
+    update();
+}
+
 QRgb QTSGraph::GetPixel(int x, int y)
 {
     return Canvas.toImage().pixelColor(x, y).rgba();

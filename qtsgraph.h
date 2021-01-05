@@ -71,6 +71,7 @@ public:
 
     void Circle(int x, int y, int radius);
     void Delay(int ms = 1000);
+    void Ellipse(int x1, int y1, int x2, int y2);
     QRgb GetPixel(int x, int y);
     void Line(int x1, int y1, int x2, int y2);
     bool KeyPressed();

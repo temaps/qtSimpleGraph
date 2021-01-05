@@ -25,14 +25,18 @@ void QTSGraph::PaintBox()
     Line(0, 0, 600, 600);
     SetColor(0xFF0000);
     Line(600, 0, 0, 600);
-    Rectangle(0,0,600,600);
+    Rectangle(0, 0, 600, 600);
     SetColor(clBlue);
     SetTextStyle(0, 45, 10);
     OutTextXY(30, 30, "Hello world!");
     SetTextStyle(1, 0, 20);
     OutTextXY(210, 50, "Hello world!");
-    SetTextStyle(2, 0, 30);
-    OutTextXY(160, 550, "Hello world!");
+    SetTextStyle(2, 180, 30);
+    OutTextXY(460, 550, "Hello world!");
+    SetColor(0x999999);
+    SetPenStyle(5);
+    SetFillStyle(1, clMagenta);
+    Ellipse(250, 280, 350, 320);
 
     // Конец рисования
 }
