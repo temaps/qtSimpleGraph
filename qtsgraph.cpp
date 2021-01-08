@@ -103,6 +103,7 @@ void QTSGraph::Circle(int x, int y, int radius)
 
 bool QTSGraph::MouseClicked()
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
     bool m = EventMouseClicked;
     EventMouseClicked = false;
     return m;
@@ -146,6 +147,18 @@ int QTSGraph::ReadKey()
     }
     int t = IDPressedKey;
     IDPressedKey = -1;
+    return t;
+}
+
+int QTSGraph::ReadMouseButton()
+{
+    if(IDMouseButton == -1)
+    {
+        while(!MouseClicked() && this->isVisible())
+            Delay(1);
+    }
+    int t = IDMouseButton;
+    IDMouseButton = -1;
     return t;
 }
 
@@ -233,10 +246,17 @@ void QTSGraph::mousePressEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton)
     {
         // Левая кнопка
+        IDMouseButton = 1;
     }
     else if (event->buttons() & Qt::RightButton)
     {
         // Правая кнопка
+        IDMouseButton = 2;
+    }
+    else if (event->buttons() & Qt::MiddleButton)
+    {
+        // Средняя кнопка
+        IDMouseButton = 3;
     }
     ResetTimer->start(ResetInterval);
 }

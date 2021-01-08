@@ -79,9 +79,10 @@ public:
     void OutTextXY(int x, int y, std::string caption);
     void PutPixel(int x, int y, QRgb c = 0x00000000, int PenWidth = 1);
     int ReadKey();
+    int ReadMouseButton();
     void Rectangle(int x1, int y1, int x2, int y2);
     void SetColor(QRgb c);
-    void SetFillStyle(int Pattern, QRgb Color); // Стиль и цыет заливки
+    void SetFillStyle(int Pattern, QRgb Color); // Стиль и цвет заливки
     /*
         0 - NoBrush
         1 - SolidPattern
@@ -127,6 +128,7 @@ private:
     bool EventMouseClicked = false;
     bool EventKeyPressed = false;
     int IDPressedKey = -1;
+    int IDMouseButton = -1;
     int ResetInterval;
     int TextDirection = 0;
 

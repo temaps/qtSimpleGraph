@@ -30,7 +30,14 @@ void QTSGraph::PaintBox()
     SetTextStyle(0, 45, 10);
     OutTextXY(30, 30, "Hello world!");
     SetTextStyle(1, 0, 20);
-    OutTextXY(210, 50, "Hello world!");
+    OutTextXY(170, 50, "Кликните мышкой...");
+    int m = ReadMouseButton();
+    SetColor(clRed);
+    SetTextStyle(1, 0, 20);
+    if(m == 1) OutTextXY(150, 80, "Нажата левая кнопка");
+    else if(m == 2) OutTextXY(150, 80, "Нажата правая кнопка");
+    else if(m == 3) OutTextXY(150, 80, "Нажата средняя кнопка");
+    else OutTextXY(150, 80, "Нажата неизвестная кнопка");
     SetTextStyle(2, 180, 30);
     OutTextXY(460, 550, "Hello world!");
     SetColor(0x999999);
