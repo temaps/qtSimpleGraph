@@ -81,7 +81,8 @@ public:
     int ReadKey();
     int ReadMouseButton();
     void Rectangle(int x1, int y1, int x2, int y2);
-    void SetColor(QRgb c);
+    void SetColor(const QColor &c = Qt::black);
+    void SetColor(const QRgb c = 0x00000000);
     void SetFillStyle(int Pattern, QRgb Color); // Стиль и цвет заливки
     /*
         0 - NoBrush

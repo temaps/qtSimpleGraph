@@ -17,8 +17,7 @@ HEADERS += \
 
 FORMS +=
 
-TRANSLATIONS += \
-    qtSimpleGraph_ru_RU.ts
+TRANSLATIONS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

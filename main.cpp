@@ -1,6 +1,4 @@
 #include "qtsgraph.h"
-using namespace Qt;
-using namespace std;
 
 int main(int argc, char *argv[])
 {

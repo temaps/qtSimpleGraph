@@ -70,6 +70,10 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
         y = center.y() - h / 2;
     }
     this->setGeometry(x, y, w, h);
+    this->setMinimumHeight(h);
+    this->setMinimumWidth(w);
+    this->setMaximumHeight(h);
+    this->setMaximumWidth(w);
     this->setWindowTitle("Рисунок");
     Canvas = QPixmap(w, h);
     Canvas.fill(Qt::white);
@@ -171,7 +175,12 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
     update();
 }
 
-void QTSGraph::SetColor(QRgb c)
+void QTSGraph::SetColor(const QColor &c)
+{
+    Pen.setColor(c);
+}
+
+void QTSGraph::SetColor(const QRgb c)
 {
     Pen.setColor(QColor(c));
 }
