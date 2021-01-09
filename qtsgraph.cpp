@@ -60,6 +60,7 @@ QRgb QTSGraph::GetPixel(int x, int y)
     if(SwapYAxis) y = Canvas.height() - y - 1;
     return Canvas.toImage().pixelColor(x, y).rgba() % 0x1000000;
 }
+
 QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     : QMainWindow(parent)
 {
