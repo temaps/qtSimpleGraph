@@ -52,14 +52,14 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDebug>
 #include <math.h>
 
-#define clRed       0x00FF0000
-#define clGreen     0x0000FF00
-#define clBlue      0x000000FF
-#define clBlack     0x00000000
-#define clWhite     0x00FFFFFF
-#define clYellow    0x00FFFF00
-#define clMagenta   0x00FF00FF
-#define clCyan      0x0000FFFF
+#define clRed       0xFF0000
+#define clGreen     0x00FF00
+#define clBlue      0x0000FF
+#define clBlack     0x000000
+#define clWhite     0xFFFFFF
+#define clYellow    0xFFFF00
+#define clMagenta   0xFF00FF
+#define clCyan      0x00FFFF
 
 class QTSGraph : public QMainWindow
 {

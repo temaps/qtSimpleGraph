@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
      */
     QTSGraph w(1024, 768);
 
+    w.SwapYAxis = false;
     w.show();
     return a.exec();
 }
@@ -62,7 +63,7 @@ void QTSGraph::PaintBox()
         OutTextXY(20, 70, "Можно прервать, если кликнуть мышью.");
         while(!MouseClicked() && x < 1024)
         {
-            PutPixel(x, 50, 0x555555 + x * 16, 5);
+            PutPixel(x, 50, 0x555555 + x * 9999, 5);
             x += 1;
             Delay(10);
         }
@@ -78,11 +79,11 @@ void QTSGraph::PaintBox()
     SetFillStyle(1, clBlack);
     Rectangle(10, 600, 200, 700);
     stringstream ss;
-    ss << "#" << hex << GetPixel(100,720);
+    ss << "0x" << hex << GetPixel(100,720);
     SetColor(clBlack);
     OutTextXY(10, 590, ss.str());
     ss.str("");
-    ss << "#" << hex << GetPixel(50,650);
+    ss << "0x" << hex << GetPixel(50,650);
     SetColor(clWhite);
     OutTextXY(30, 620, ss.str());
     ss.str("");
