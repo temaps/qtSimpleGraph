@@ -23,10 +23,11 @@ void QTSGraph::PaintBox()
     Line(0, 0, 600, 600);
     SetColor(0xFF0000);
     Line(600, 0, 0, 600);
-    Rectangle(0, 0, 600, 600);
-    SetColor(clBlue);
+    Rectangle(0, 0, 599, 599);
+    QColor c = Qt::blue;
+    SetColor(c);
     SetTextStyle(0, 45, 10);
-    OutTextXY(30, 30, "Hello world!");
+    OutTextXY(70, 70, "Hello world!");
     SetTextStyle(1, 0, 20);
     OutTextXY(170, 50, "Кликните мышкой...");
     int m = ReadMouseButton();

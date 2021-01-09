@@ -50,12 +50,14 @@ void QTSGraph::Ellipse(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
-    painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
+    if(SwapYAxis) painter.drawEllipse(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, abs(x2-x1), abs(y2-y1));
+    else  painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
     update();
 }
 
 QRgb QTSGraph::GetPixel(int x, int y)
 {
+    if(SwapYAxis) y = Canvas.height() - y - 1;
     return Canvas.toImage().pixelColor(x, y).rgba();
 }
 QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
@@ -101,7 +103,8 @@ void QTSGraph::Circle(int x, int y, int radius)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
-    painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
+    if(SwapYAxis) painter.drawEllipse(x - radius, Canvas.height() - (y - radius) - (radius * 2) - 1, radius * 2, radius * 2);
+    else painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
     update();
 }
 
@@ -119,6 +122,7 @@ void QTSGraph::OutTextXY(int x, int y, std::string caption)
     painter.setPen(Pen);
     painter.setFont(Font);
     double r, b, sa, ca, sb, cb, xn, yn;
+    if(SwapYAxis) y = Canvas.height() - y - 1;
     b = TextDirection*3.14159/180;
     r = sqrt(x * x + y * y);
     sa = y / r;
@@ -130,7 +134,6 @@ void QTSGraph::OutTextXY(int x, int y, std::string caption)
     painter.translate(x - xn, y - yn);
     painter.rotate(TextDirection);
     painter.drawText(x, y, QString::fromStdString(caption));
-    //painter.rotate(-TextDirection);
     update();
 }
 
@@ -138,7 +141,8 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 {
     QPainter painter(&Canvas);
     painter.setPen(QPen(QBrush(QColor(c)), PenWidth));
-    painter.drawPoint(x, y);
+    if(SwapYAxis) painter.drawPoint(x, Canvas.height() - y - 1);
+    else painter.drawPoint(x, y);
     update();
 }
 
@@ -171,7 +175,8 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
-    painter.drawRect(x1, y1, x2 - x1, y2 - y1);
+    if(SwapYAxis) painter.drawRect(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, x2 - x1, y2 - y1);
+    else painter.drawRect(x1, y1, x2 - x1, y2 - y1);
     update();
 }
 
@@ -217,7 +222,8 @@ void QTSGraph::Line(int x1, int y1, int x2, int y2)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
-    painter.drawLine(x1, y1, x2, y2);
+    if(SwapYAxis) painter.drawLine(x1, Canvas.height() - y1 - 1, x2, Canvas.height() - y2 - 1);
+    else painter.drawLine(x1, y1, x2, y2);
     update();
 }
 

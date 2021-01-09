@@ -69,6 +69,8 @@ public:
     QTSGraph(int w = 640, int h = 480, int x = -1, int y = -1, QWidget *parent = nullptr);
     ~QTSGraph();
 
+    bool SwapYAxis = false;
+
     void Circle(int x, int y, int radius);
     void Delay(int ms = 1000);
     void Ellipse(int x1, int y1, int x2, int y2);
