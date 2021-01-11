@@ -50,6 +50,8 @@ void QTSGraph::Ellipse(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
+    if(y1 > y2) std::swap(y1, y2);
+    if(x1 > x2) std::swap(x1, x2);
     if(SwapYAxis) painter.drawEllipse(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, abs(x2-x1), abs(y2-y1));
     else  painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
     update();
@@ -176,6 +178,8 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
+    if(y1 > y2) std::swap(y1, y2);
+    if(x1 > x2) std::swap(x1, x2);
     if(SwapYAxis) painter.drawRect(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, x2 - x1, y2 - y1);
     else painter.drawRect(x1, y1, x2 - x1, y2 - y1);
     update();
