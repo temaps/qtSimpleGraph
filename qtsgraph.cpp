@@ -305,7 +305,7 @@ void QTSGraph::paintEvent(QPaintEvent *event)
         p.drawText(2, Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
 
         p.drawLine(3 * Canvas.width() / 4, 0, 3 * Canvas.width() / 4, Canvas.height() - 1);
-        p.drawLine(0, 3 * Canvas.height() / 4 - 1, Canvas.width() - 1, 3 * Canvas.height() / 4 - correctY);
+        p.drawLine(0, 3 * Canvas.height() / 4 - correctY, Canvas.width() - 1, 3 * Canvas.height() / 4 - correctY);
         p.drawText(3 * Canvas.width() / 4 + 2, 12, QString::number(3 * Canvas.width() / 4));
         mult = correctY ? 1 : 3;
         p.drawText(2, 3 * Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
