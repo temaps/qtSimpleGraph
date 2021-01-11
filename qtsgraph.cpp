@@ -86,6 +86,7 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     Pen = QPen(QBrush(QColor(DefaultColor)), 1);
     Font = QFont();
     Brush = QBrush(QColor(DefaultColor),Qt::NoBrush);
+    SetTextStyle(1, 0, 10);
     ResetInterval = 1000;
     ResetTimer = new QTimer();
     connect(ResetTimer, SIGNAL(timeout()), this, SLOT(slotResetTimer()));
@@ -227,7 +228,7 @@ void QTSGraph::SetTextStyle(int idFont, int Direction, int CharSize)
     QString f;
     if(idFont == 0) f = "serif";
     else if(idFont == 1) f = "sans";
-    else if(idFont == 3) f = "mono";
+    else if(idFont == 2) f = "mono";
     TextDirection = Direction;
     Font.setFamily(f);
     Font.setPointSize(CharSize);
