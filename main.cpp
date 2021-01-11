@@ -19,6 +19,7 @@ void QTSGraph::PaintBox()
 {
     // Начало рисования
 
+    ShowAxes();
     SetColor(clGreen);
     Line(0, 0, 600, 600);
     SetColor(0xFF0000);

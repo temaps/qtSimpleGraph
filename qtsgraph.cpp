@@ -101,6 +101,16 @@ QTSGraph::~QTSGraph()
     // Деструктор
 }
 
+void QTSGraph::ShowAxes()
+{
+    AxesVisible = true;
+}
+
+void QTSGraph::HideAxes()
+{
+    AxesVisible = false;
+}
+
 void QTSGraph::Circle(int x, int y, int radius)
 {
     QPainter painter(&Canvas);
@@ -257,6 +267,55 @@ void QTSGraph::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, Canvas);
+    if(AxesVisible)
+    {
+        p.setPen(QPen(QBrush(QColor(Qt::lightGray)), 1));
+        p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2, Canvas.height() - 1);
+        p.drawLine(0, Canvas.height() / 2, Canvas.width() - 1, Canvas.height() / 2);
+        p.drawText(Canvas.width() / 2 + 2, 12, QString::number(Canvas.width() / 2));
+        p.drawText(2, Canvas.height() / 2 - 2, QString::number(Canvas.height() / 2));
+        p.setPen(QPen(QBrush(QColor(Qt::red)), 3));
+        if(SwapYAxis)
+        {
+            p.drawLine(0, Canvas.height() - 1, Canvas.width() - 1, Canvas.height() - 1);
+            p.drawLine(Canvas.width() - 10, Canvas.height() - 10, Canvas.width() - 1, Canvas.height() - 1);
+            p.drawText(Canvas.width() - 10, Canvas.height() - 15, "X");
+            p.drawLine(0, Canvas.height() - 1, 0, 0);
+            p.drawLine(10, 10, 0, 0);
+            p.drawText(12, 12, "Y");
+
+            p.setPen(QPen(QBrush(QColor(0xDDDDDD)), 1));
+            p.drawLine(Canvas.width() / 4, 0, Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, Canvas.height() / 4, Canvas.width() - 1, Canvas.height() / 4);
+            p.drawText(Canvas.width() / 4 + 2, 12, QString::number(Canvas.width() / 4));
+            p.drawText(2, Canvas.height() / 4 - 2, QString::number(3 * Canvas.height() / 4));
+
+            p.drawLine(3 * Canvas.width() / 4, 0, 3 * Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, 3 * Canvas.height() / 4, Canvas.width() - 1, 3 * Canvas.height() / 4);
+            p.drawText(3 * Canvas.width() / 4 + 2, 12, QString::number(3 * Canvas.width() / 4));
+            p.drawText(2, 3 * Canvas.height() / 4 - 2, QString::number(Canvas.height() / 4));
+        }
+        else
+        {
+            p.drawLine(0, 0, Canvas.width() - 1, 0);
+            p.drawLine(Canvas.width() - 10, 10, Canvas.width() - 1, 0);
+            p.drawText(Canvas.width() - 10, 22, "X");
+            p.drawLine(0, Canvas.height() - 1, 0, 0);
+            p.drawLine(10, Canvas.height() - 10, 0, Canvas.height() - 1);
+            p.drawText(13, Canvas.height() - 2, "Y");
+
+            p.setPen(QPen(QBrush(QColor(0xDDDDDD)), 1));
+            p.drawLine(Canvas.width() / 4, 0, Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, Canvas.height() / 4, Canvas.width() - 1, Canvas.height() / 4);
+            p.drawText(Canvas.width() / 4 + 2, 12, QString::number(Canvas.width() / 4));
+            p.drawText(2, Canvas.height() / 4 - 2, QString::number(Canvas.height() / 4));
+
+            p.drawLine(3 * Canvas.width() / 4, 0, 3 * Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, 3 * Canvas.height() / 4, Canvas.width() - 1, 3 * Canvas.height() / 4);
+            p.drawText(3 * Canvas.width() / 4 + 2, 12, QString::number(3 * Canvas.width() / 4));
+            p.drawText(2, 3 * Canvas.height() / 4 - 2, QString::number(3 * Canvas.height() / 4));
+        }
+    }
 }
 
 void QTSGraph::mousePressEvent(QMouseEvent *event)

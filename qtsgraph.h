@@ -71,6 +71,9 @@ public:
 
     bool SwapYAxis = false;
 
+    void ShowAxes();
+    void HideAxes();
+
     void Circle(int x, int y, int radius);
     void Delay(int ms = 1000);
     void Ellipse(int x1, int y1, int x2, int y2);
@@ -128,6 +131,7 @@ private slots:
     void slotStartTimer();
 
 private:
+    bool AxesVisible = false;
     bool EventMouseClicked = false;
     bool EventKeyPressed = false;
     int IDPressedKey = -1;
