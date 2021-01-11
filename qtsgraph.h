@@ -119,7 +119,7 @@ public:
         5 - DashDotDotLine
      */
     void SetPenWidth(int PenWidth);
-    void SetTextStyle(int idFont, int Direction, int CharSize);
+    void SetTextStyle(int CharSize, int Direction = 0, int idFont = 0);
     /*
         0 - serif
         1 - sans

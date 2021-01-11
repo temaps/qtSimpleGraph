@@ -86,7 +86,7 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     Pen = QPen(QBrush(QColor(DefaultColor)), 1);
     Font = QFont();
     Brush = QBrush(QColor(DefaultColor),Qt::NoBrush);
-    SetTextStyle(1, 0, 10);
+    SetTextStyle(10);
     ResetInterval = 1000;
     ResetTimer = new QTimer();
     connect(ResetTimer, SIGNAL(timeout()), this, SLOT(slotResetTimer()));
@@ -137,7 +137,7 @@ void QTSGraph::OutTextXY(int x, int y, std::string caption)
     painter.setFont(Font);
     double r, b, sa, ca, sb, cb, xn, yn;
     if(SwapYAxis) y = Canvas.height() - y - 1;
-    b = TextDirection*3.14159/180;
+    b = TextDirection * 3.14159 / 180;
     r = sqrt(x * x + y * y);
     sa = y / r;
     ca = x / r;
@@ -223,7 +223,7 @@ void QTSGraph::SetPenWidth(int PenWidth)
     Pen.setWidth(PenWidth);
 }
 
-void QTSGraph::SetTextStyle(int idFont, int Direction, int CharSize)
+void QTSGraph::SetTextStyle(int CharSize, int Direction, int idFont)
 {
     QString f;
     if(idFont == 0) f = "serif";
