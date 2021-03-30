@@ -44,6 +44,17 @@ void QTSGraph::PaintBox()
     SetPenStyle(5);
     SetFillStyle(1, clMagenta);
     Ellipse(250, 280, 350, 320);
-
+    TPixel p;
+    while(ReadMouseButton() != 2)
+    {
+        p = ReadMousePosition();
+        SetColor(clBlack);
+        SetPenStyle(1, 1);
+        SetFillStyle(1, clWhite);
+        Rectangle(10, 10, 100, 100);
+        SetTextStyle(16, 0, 0);
+        OutTextXY(30, 30, std::to_string(p.x));
+        OutTextXY(30, 60, std::to_string(p.y));
+    }
     // Конец рисования
 }

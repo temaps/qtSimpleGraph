@@ -61,6 +61,12 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #define clMagenta   0xFF00FF
 #define clCyan      0x00FFFF
 
+struct TPixel
+{
+    int x, y;
+    unsigned int color;
+};
+
 class QTSGraph : public QMainWindow
 {
     Q_OBJECT
@@ -85,6 +91,7 @@ public:
     void PutPixel(int x, int y, QRgb c = 0x00000000, int PenWidth = 1);
     int ReadKey();
     int ReadMouseButton();
+    TPixel ReadMousePosition();
     void Rectangle(int x1, int y1, int x2, int y2);
     void SetColor(const QColor &c = Qt::black);
     void SetColor(const QRgb c = 0x00000000);
@@ -138,6 +145,7 @@ private:
     int IDMouseButton = -1;
     int ResetInterval;
     int TextDirection = 0;
+    QPoint LastMouseClickPosition;
 
     QBrush Brush;
     QPixmap Canvas;

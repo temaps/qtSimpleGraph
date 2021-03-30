@@ -184,6 +184,15 @@ int QTSGraph::ReadMouseButton()
     return t;
 }
 
+TPixel QTSGraph::ReadMousePosition()
+{
+    TPixel t;
+    t.x = LastMouseClickPosition.x();
+    t.y = LastMouseClickPosition.y();
+    t.color = GetPixel(t.x, t.y);
+    return t;
+}
+
 void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
 {
     QPainter painter(&Canvas);
@@ -316,6 +325,7 @@ void QTSGraph::paintEvent(QPaintEvent *event)
 void QTSGraph::mousePressEvent(QMouseEvent *event)
 {
     ResetTimer->stop();
+    LastMouseClickPosition = event->pos();
     EventMouseClicked = true;
     if (event->buttons() & Qt::LeftButton)
     {
