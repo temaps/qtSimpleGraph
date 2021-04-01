@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     QTSGraph w(600, 600);
 
     //w.SwapYAxis = true;
+    //w.MoveOtoCenter = true;
     w.show();
     return a.exec();
 }
@@ -20,6 +21,7 @@ void QTSGraph::PaintBox()
 {
     // Начало рисования
 
+    //ShowAxes();
     SetColor(clGreen);
     Line(0, 0, 600, 600);
     SetColor(0xFF0000);

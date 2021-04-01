@@ -50,16 +50,17 @@ void QTSGraph::Ellipse(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
+    ChangeCoord(&x1, &y1);
+    ChangeCoord(&x2, &y2);
     if(y1 > y2) std::swap(y1, y2);
     if(x1 > x2) std::swap(x1, x2);
-    if(SwapYAxis) painter.drawEllipse(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, abs(x2-x1), abs(y2-y1));
-    else  painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
+    painter.drawEllipse(x1, y1, abs(x2-x1), abs(y2-y1));
     update();
 }
 
 QRgb QTSGraph::GetPixel(int x, int y)
 {
-    if(SwapYAxis) y = Canvas.height() - y - 1;
+    ChangeCoord(&x, &y);
     return Canvas.toImage().pixelColor(x, y).rgba() % 0x1000000;
 }
 
@@ -95,6 +96,7 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
     StartTimer = new QTimer();
     connect(StartTimer, SIGNAL(timeout()), this, SLOT(slotStartTimer()));
     StartTimer->start(500);
+    setMouseTracking(true);
 }
 
 QTSGraph::~QTSGraph()
@@ -117,8 +119,8 @@ void QTSGraph::Circle(int x, int y, int radius)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
-    if(SwapYAxis) painter.drawEllipse(x - radius, Canvas.height() - (y - radius) - (radius * 2) - 1, radius * 2, radius * 2);
-    else painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
+    ChangeCoord(&x, &y);
+    painter.drawEllipse(x - radius, y - radius, radius * 2, radius * 2);
     update();
 }
 
@@ -136,7 +138,7 @@ void QTSGraph::OutTextXY(int x, int y, std::string caption)
     painter.setPen(Pen);
     painter.setFont(Font);
     double r, b, sa, ca, sb, cb, xn, yn;
-    if(SwapYAxis) y = Canvas.height() - y - 1;
+    ChangeCoord(&x, &y);
     b = TextDirection * 3.14159 / 180;
     r = sqrt(x * x + y * y);
     sa = y / r;
@@ -155,8 +157,8 @@ void QTSGraph::PutPixel(int x, int y, QRgb c, int PenWidth)
 {
     QPainter painter(&Canvas);
     painter.setPen(QPen(QBrush(QColor(c)), PenWidth));
-    if(SwapYAxis) painter.drawPoint(x, Canvas.height() - y - 1);
-    else painter.drawPoint(x, y);
+    ChangeCoord(&x, &y);
+    painter.drawPoint(x, y);
     update();
 }
 
@@ -187,9 +189,25 @@ int QTSGraph::ReadMouseButton()
 TPixel QTSGraph::ReadMousePosition()
 {
     TPixel t;
+    t.x = MouseMovePosition.x();
+    t.y = MouseMovePosition.y();
+    t.color = GetPixel(t.x, t.y);
+    if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
+    if(MoveOtoCenter)
+    {
+        t.x -= Canvas.width() / 2;
+        t.y -= Canvas.height() / 2;
+    }
+    return t;
+}
+
+TPixel QTSGraph::GetLastMouseClickPosition()
+{
+    TPixel t;
     t.x = LastMouseClickPosition.x();
     t.y = LastMouseClickPosition.y();
     t.color = GetPixel(t.x, t.y);
+    ChangeCoord(&t.x, &t.y);
     return t;
 }
 
@@ -198,10 +216,11 @@ void QTSGraph::Rectangle(int x1, int y1, int x2, int y2)
     QPainter painter(&Canvas);
     painter.setPen(Pen);
     painter.setBrush(Brush);
+    ChangeCoord(&x1, &y1);
+    ChangeCoord(&x2, &y2);
     if(y1 > y2) std::swap(y1, y2);
     if(x1 > x2) std::swap(x1, x2);
-    if(SwapYAxis) painter.drawRect(x1, Canvas.height() - y1 - abs(y2 - y1) - 1, x2 - x1, y2 - y1);
-    else painter.drawRect(x1, y1, x2 - x1, y2 - y1);
+    painter.drawRect(x1, y1, x2 - x1, y2 - y1);
     update();
 }
 
@@ -247,8 +266,9 @@ void QTSGraph::Line(int x1, int y1, int x2, int y2)
 {
     QPainter painter(&Canvas);
     painter.setPen(Pen);
-    if(SwapYAxis) painter.drawLine(x1, Canvas.height() - y1 - 1, x2, Canvas.height() - y2 - 1);
-    else painter.drawLine(x1, y1, x2, y2);
+    ChangeCoord(&x1, &y1);
+    ChangeCoord(&x2, &y2);
+    painter.drawLine(x1, y1, x2, y2);
     update();
 }
 
@@ -266,6 +286,16 @@ void QTSGraph::slotStartTimer()
     PaintBox();
 }
 
+void QTSGraph::ChangeCoord(int *x, int *y)
+{
+    if(MoveOtoCenter)
+    {
+        *x += Canvas.width() / 2;
+        *y += Canvas.height() / 2;
+    }
+    if(SwapYAxis) *y = Canvas.height() - *y - 1;
+}
+
 void QTSGraph::slotResetTimer()
 {
     ResetTimer->stop();
@@ -281,44 +311,70 @@ void QTSGraph::paintEvent(QPaintEvent *event)
     int mult = 1;
     if(AxesVisible)
     {
-        p.setPen(QPen(QBrush(QColor(Qt::red)), 3));
-        if(SwapYAxis)
+        if(MoveOtoCenter)
         {
-            p.drawLine(0, Canvas.height() - 1, Canvas.width() - 1, Canvas.height() - 1);
-            p.drawLine(Canvas.width() - 10, Canvas.height() - 10, Canvas.width() - 1, Canvas.height() - 1);
-            p.drawText(Canvas.width() - 10, Canvas.height() - 15, "X");
-            p.drawLine(0, Canvas.height() - 1, 0, 0);
-            p.drawLine(10, 10, 0, 0);
-            p.drawText(12, 12, "Y");
-            correctY = 1;
+            p.setPen(QPen(QBrush(QColor(Qt::red)), 1));
+            if(SwapYAxis)
+            {
+                p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2, Canvas.height() - 1);
+                p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2 + 10, 10);
+                p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2 - 10, 10);
+                p.drawText(Canvas.width() / 2 - 20, 12, "Y");
+                correctY = 1;
+            }
+            else
+            {
+                p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2, Canvas.height() - 1);
+                p.drawLine(Canvas.width() / 2, Canvas.height() - 1, Canvas.width() / 2 + 10, Canvas.height() - 1 - 10);
+                p.drawLine(Canvas.width() / 2, Canvas.height() - 1, Canvas.width() / 2 - 10, Canvas.height() - 1 - 10);
+                p.drawText(Canvas.width() / 2 - 20, Canvas.height() - 2, "Y");
+            }
+            p.drawLine(0, Canvas.height() / 2, Canvas.width() - 1, Canvas.height() / 2);
+            p.drawLine(Canvas.width() - 1, Canvas.height() / 2, Canvas.width() - 1 - 10, Canvas.height() / 2 + 10);
+            p.drawLine(Canvas.width() - 1, Canvas.height() / 2, Canvas.width() - 1 - 10, Canvas.height() / 2 - 10);
+            p.drawText(Canvas.width() - 1 - 10, Canvas.height() / 2 + 20, "X");
         }
         else
         {
-            p.drawLine(0, 0, Canvas.width() - 1, 0);
-            p.drawLine(Canvas.width() - 10, 10, Canvas.width() - 1, 0);
-            p.drawText(Canvas.width() - 10, 22, "X");
-            p.drawLine(0, Canvas.height() - 1, 0, 0);
-            p.drawLine(10, Canvas.height() - 10, 0, Canvas.height() - 1);
-            p.drawText(13, Canvas.height() - 2, "Y");
+            p.setPen(QPen(QBrush(QColor(Qt::red)), 3));
+            if(SwapYAxis)
+            {
+                p.drawLine(0, Canvas.height() - 1, Canvas.width() - 1, Canvas.height() - 1);
+                p.drawLine(Canvas.width() - 10, Canvas.height() - 10, Canvas.width() - 1, Canvas.height() - 1);
+                p.drawText(Canvas.width() - 10, Canvas.height() - 15, "X");
+                p.drawLine(0, Canvas.height() - 1, 0, 0);
+                p.drawLine(10, 10, 0, 0);
+                p.drawText(12, 12, "Y");
+                correctY = 1;
+            }
+            else
+            {
+                p.drawLine(0, 0, Canvas.width() - 1, 0);
+                p.drawLine(Canvas.width() - 10, 10, Canvas.width() - 1, 0);
+                p.drawText(Canvas.width() - 10, 22, "X");
+                p.drawLine(0, Canvas.height() - 1, 0, 0);
+                p.drawLine(10, Canvas.height() - 10, 0, Canvas.height() - 1);
+                p.drawText(13, Canvas.height() - 2, "Y");
+            }
+            p.setPen(QPen(QBrush(QColor(Qt::lightGray)), 1));
+            p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2, Canvas.height() - 1);
+            p.drawLine(0, Canvas.height() / 2 - correctY, Canvas.width() - 1, Canvas.height() / 2 - correctY);
+            p.drawText(Canvas.width() / 2 + 2, 12, QString::number(Canvas.width() / 2));
+            p.drawText(2, Canvas.height() / 2 - 2, QString::number(Canvas.height() / 2));
+
+            p.setPen(QPen(QBrush(QColor(0xDDDDDD)), 1));
+            p.drawLine(Canvas.width() / 4, 0, Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, Canvas.height() / 4 - correctY, Canvas.width() - 1, Canvas.height() / 4 - correctY);
+            p.drawText(Canvas.width() / 4 + 2, 12, QString::number(Canvas.width() / 4));
+            if(correctY) mult = 3;
+            p.drawText(2, Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
+
+            p.drawLine(3 * Canvas.width() / 4, 0, 3 * Canvas.width() / 4, Canvas.height() - 1);
+            p.drawLine(0, 3 * Canvas.height() / 4 - correctY, Canvas.width() - 1, 3 * Canvas.height() / 4 - correctY);
+            p.drawText(3 * Canvas.width() / 4 + 2, 12, QString::number(3 * Canvas.width() / 4));
+            mult = correctY ? 1 : 3;
+            p.drawText(2, 3 * Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
         }
-        p.setPen(QPen(QBrush(QColor(Qt::lightGray)), 1));
-        p.drawLine(Canvas.width() / 2, 0, Canvas.width() / 2, Canvas.height() - 1);
-        p.drawLine(0, Canvas.height() / 2 - correctY, Canvas.width() - 1, Canvas.height() / 2 - correctY);
-        p.drawText(Canvas.width() / 2 + 2, 12, QString::number(Canvas.width() / 2));
-        p.drawText(2, Canvas.height() / 2 - 2, QString::number(Canvas.height() / 2));
-
-        p.setPen(QPen(QBrush(QColor(0xDDDDDD)), 1));
-        p.drawLine(Canvas.width() / 4, 0, Canvas.width() / 4, Canvas.height() - 1);
-        p.drawLine(0, Canvas.height() / 4 - correctY, Canvas.width() - 1, Canvas.height() / 4 - correctY);
-        p.drawText(Canvas.width() / 4 + 2, 12, QString::number(Canvas.width() / 4));
-        if(correctY) mult = 3;
-        p.drawText(2, Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
-
-        p.drawLine(3 * Canvas.width() / 4, 0, 3 * Canvas.width() / 4, Canvas.height() - 1);
-        p.drawLine(0, 3 * Canvas.height() / 4 - correctY, Canvas.width() - 1, 3 * Canvas.height() / 4 - correctY);
-        p.drawText(3 * Canvas.width() / 4 + 2, 12, QString::number(3 * Canvas.width() / 4));
-        mult = correctY ? 1 : 3;
-        p.drawText(2, 3 * Canvas.height() / 4 - 2, QString::number(mult * Canvas.height() / 4));
     }
 }
 
@@ -343,6 +399,12 @@ void QTSGraph::mousePressEvent(QMouseEvent *event)
         IDMouseButton = 3;
     }
     ResetTimer->start(ResetInterval);
+}
+
+void QTSGraph::mouseMoveEvent(QMouseEvent *event)
+{
+    MouseMovePosition = event->pos();
+    update();
 }
 
 void QTSGraph::keyPressEvent(QKeyEvent *event)

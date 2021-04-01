@@ -76,6 +76,7 @@ public:
     ~QTSGraph();
 
     bool SwapYAxis = false;
+    bool MoveOtoCenter = false;
 
     void ShowAxes();
     void HideAxes();
@@ -92,6 +93,7 @@ public:
     int ReadKey();
     int ReadMouseButton();
     TPixel ReadMousePosition();
+    TPixel GetLastMouseClickPosition();
     void Rectangle(int x1, int y1, int x2, int y2);
     void SetColor(const QColor &c = Qt::black);
     void SetColor(const QRgb c = 0x00000000);
@@ -146,6 +148,7 @@ private:
     int ResetInterval;
     int TextDirection = 0;
     QPoint LastMouseClickPosition;
+    QPoint MouseMovePosition;
 
     QBrush Brush;
     QPixmap Canvas;
@@ -154,11 +157,14 @@ private:
     QTimer *ResetTimer;
     QTimer *StartTimer;
 
+    void ChangeCoord(int* x, int* y);
+
     void PaintBox();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
     void keyPressEvent(QKeyEvent *event)  override;
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 };
