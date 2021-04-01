@@ -207,7 +207,12 @@ TPixel QTSGraph::GetLastMouseClickPosition()
     t.x = LastMouseClickPosition.x();
     t.y = LastMouseClickPosition.y();
     t.color = GetPixel(t.x, t.y);
-    ChangeCoord(&t.x, &t.y);
+    if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
+    if(MoveOtoCenter)
+    {
+        t.x -= Canvas.width() / 2;
+        t.y -= Canvas.height() / 2;
+    }
     return t;
 }
 
