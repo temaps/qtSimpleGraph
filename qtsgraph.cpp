@@ -191,7 +191,7 @@ TPixel QTSGraph::ReadMousePosition()
     TPixel t;
     t.x = MouseMovePosition.x();
     t.y = MouseMovePosition.y();
-    t.color = GetPixel(t.x, t.y);
+    t.color = Canvas.toImage().pixelColor(t.x, t.y).rgba() % 0x1000000;
     if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
     if(MoveOtoCenter)
     {
@@ -206,7 +206,7 @@ TPixel QTSGraph::GetLastMouseClickPosition()
     TPixel t;
     t.x = LastMouseClickPosition.x();
     t.y = LastMouseClickPosition.y();
-    t.color = GetPixel(t.x, t.y);
+    t.color = Canvas.toImage().pixelColor(t.x, t.y).rgba() % 0x1000000;
     if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
     if(MoveOtoCenter)
     {
