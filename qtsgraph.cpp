@@ -69,8 +69,8 @@ QTSGraph::QTSGraph(int w, int h, int x, int y, QWidget *parent)
 {
     if(x < 0 || y < 0)
     {
-        QDesktopWidget desktop;
-        QRect rect = desktop.availableGeometry(desktop.primaryScreen()); // прямоугольник с размерами экрана
+        QScreen *scr = QGuiApplication::screens().at(0); //получаем ссылку на основной экран
+        QRect rect = scr->availableGeometry(); //прямоугольник с размерами экрана
         QPoint center = rect.center(); //координаты центра экрана
         x = center.x() - w / 2;
         y = center.y() - h / 2;

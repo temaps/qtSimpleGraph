@@ -39,7 +39,7 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QApplication>
 #include <QMainWindow>
 #include <QPainter>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QBrush>
 #include <QFont>
 #include <QPen>
