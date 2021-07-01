@@ -42,7 +42,7 @@ void QTSGraph::Delay(int ms)
 {
     QTime dieTime= QTime::currentTime().addMSecs(ms);
     while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+        QCoreApplication::processEvents(QEventLoop::AllEvents, ms);
 }
 
 void QTSGraph::Ellipse(int x1, int y1, int x2, int y2)
@@ -191,7 +191,7 @@ TPixel QTSGraph::ReadMousePosition()
     TPixel t;
     t.x = MouseMovePosition.x();
     t.y = MouseMovePosition.y();
-    t.color = Canvas.toImage().pixelColor(t.x, t.y).rgba() % 0x1000000;
+    t.color = GetPixel(t.x, t.y);
     if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
     if(MoveOtoCenter)
     {
@@ -206,7 +206,7 @@ TPixel QTSGraph::GetLastMouseClickPosition()
     TPixel t;
     t.x = LastMouseClickPosition.x();
     t.y = LastMouseClickPosition.y();
-    t.color = Canvas.toImage().pixelColor(t.x, t.y).rgba() % 0x1000000;
+    t.color = GetPixel(t.x, t.y);
     if(SwapYAxis) t.y = Canvas.height() - t.y - 1;
     if(MoveOtoCenter)
     {

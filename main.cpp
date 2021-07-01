@@ -22,6 +22,11 @@ void QTSGraph::PaintBox()
     // Начало рисования
 
     //ShowAxes();
+    Circle(100, 100, 20);
+    Delay(1000);
+    Circle(200, 200, 20);
+    Delay(10);
+    Circle(300, 300, 20);
     SetColor(clGreen);
     Line(0, 0, 600, 600);
     SetColor(0xFF0000);
