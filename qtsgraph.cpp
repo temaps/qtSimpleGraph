@@ -245,6 +245,18 @@ void QTSGraph::SetFillStyle(int Pattern, QRgb Color)
     Brush.setColor(QColor(Color));
 }
 
+void QTSGraph::SetFillStyle(QRgb Color)
+{
+    int Pattern = 1;
+    SetFillStyle(Pattern, Color);
+}
+
+void QTSGraph::SetNoFill()
+{
+    int Pattern = 0;
+    Brush.setStyle(Qt::BrushStyle(Pattern));
+}
+
 void QTSGraph::SetPenStyle(int PenWidth, int PenStyle)
 {
     Pen.setWidth(PenWidth);
@@ -334,9 +346,11 @@ void QTSGraph::paintEvent(QPaintEvent *event)
                 p.drawLine(Canvas.width() / 2, Canvas.height() - 1, Canvas.width() / 2 - 10, Canvas.height() - 1 - 10);
                 p.drawText(Canvas.width() / 2 - 20, Canvas.height() - 2, "Y");
             }
-            p.drawLine(0, Canvas.height() / 2, Canvas.width() - 1, Canvas.height() / 2);
-            p.drawLine(Canvas.width() - 1, Canvas.height() / 2, Canvas.width() - 1 - 10, Canvas.height() / 2 + 10);
-            p.drawLine(Canvas.width() - 1, Canvas.height() / 2, Canvas.width() - 1 - 10, Canvas.height() / 2 - 10);
+            p.drawLine(0, Canvas.height() / 2, Canvas.width() - 1, Canvas.height() / 2 - correctY);
+            p.drawLine(Canvas.width() - 1, Canvas.height() / 2 - correctY,
+                       Canvas.width() - 1 - 10, Canvas.height() / 2 - correctY + 10);
+            p.drawLine(Canvas.width() - 1, Canvas.height() / 2 - correctY,
+                       Canvas.width() - 1 - 10, Canvas.height() / 2 - correctY - 10);
             p.drawText(Canvas.width() - 1 - 10, Canvas.height() / 2 + 20, "X");
         }
         else

@@ -98,6 +98,8 @@ public:
     void SetColor(const QColor &c = Qt::black);
     void SetColor(const QRgb c = 0x00000000);
     void SetFillStyle(int Pattern, QRgb Color); // Стиль и цвет заливки
+    void SetFillStyle(QRgb Color); // Цвет заливки со стилем SolidPattern
+    void SetNoFill(); // Установить стиль заливки в NoBrush
     /*
         0 - NoBrush
         1 - SolidPattern
