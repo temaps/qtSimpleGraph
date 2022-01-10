@@ -50,7 +50,7 @@ along with Vesi.  If not, see <http://www.gnu.org/licenses/>.
 #include <QTime>
 #include <string>
 #include <QDebug>
-#include <math.h>
+#include <cmath>
 
 #define clRed       0xFF0000
 #define clGreen     0x00FF00
